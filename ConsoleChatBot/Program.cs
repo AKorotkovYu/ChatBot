@@ -6,7 +6,7 @@ namespace ConsoleChatBot
     {
         static void Main(string[] args)
         {
-            
+             
         }
     }
 }
