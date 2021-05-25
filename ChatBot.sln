@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 16.0.31313.79
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleChatBot", "ConsoleChatBot\ConsoleChatBot.csproj", "{711B522F-681F-4AC0-AFEC-EB6A4480DFFA}"
+	ProjectSection(ProjectDependencies) = postProject
+		{56789BCA-0348-4EFC-BC59-B6F5E1FC733C} = {56789BCA-0348-4EFC-BC59-B6F5E1FC733C}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClassLibraryChatBot", "ClassLibraryChatBot\ClassLibraryChatBot.csproj", "{56789BCA-0348-4EFC-BC59-B6F5E1FC733C}"
 EndProject
