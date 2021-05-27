@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ClassChatBot
+namespace ClassLibraryChatBot
 {
 
     class Answer
@@ -51,3 +51,4 @@ namespace ClassChatBot
         }
     }
 }
+

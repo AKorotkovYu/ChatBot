@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ClassChatBot
+namespace ClassLibraryChatBot
 {
-    
+
     sealed class Question
     {
         private static int m_newId = 0;
