@@ -11,21 +11,25 @@ namespace ClassLibraryChatBot
 
         private static string m_BotName = "Шарпик";
         private string m_UserName = new String("");
-        public bool isFinal = false;
+        private bool m_IsFinal = false;
+        public bool IsFinal
+        {
+            get { return m_IsFinal; }
+        }
 
         Random randomizer = new Random();
 
         internal delegate string CommandMessage();
         internal CommandMessage cMes;
 
-        static readonly List<Answer> lJokes = new List<Answer>();
-        static readonly List<Answer> lAphorisms = new List<Answer>();
-        static readonly List<Answer> lMeetings = new List<Answer>();
-        static readonly List<Answer> lAnswers = new List<Answer>();
-        static readonly List<Answer> lIniPhrases = new List<Answer>();
-        static readonly List<Answer> lErrors = new List<Answer>();
-        static readonly Dictionary<Question, CommandMessage> dCommands = new Dictionary<Question, CommandMessage>();
-        static readonly List<Question> lQuestions = new List<Question>();
+         readonly List<Answer> lJokes = new List<Answer>();
+         readonly List<Answer> lAphorisms = new List<Answer>();
+         readonly List<Answer> lMeetings = new List<Answer>();
+         readonly List<Answer> lAnswers = new List<Answer>();
+         readonly List<Answer> lIniPhrases = new List<Answer>();
+         readonly List<Answer> lErrors = new List<Answer>();
+         readonly Dictionary<Question, CommandMessage> dCommands = new Dictionary<Question, CommandMessage>();
+         readonly List<Question> lQuestions = new List<Question>();
         List<int> lCrctIDAns;
 
         static readonly List<String> lPhrases = new List<string>();
@@ -39,7 +43,7 @@ namespace ClassLibraryChatBot
         {
 
             asking = asking.ToLower();
-            string answer_line = new string("");
+            string answer_line = String.Empty;
             lPhrases.Clear();
 
             foreach (var command in dCommands)
@@ -156,7 +160,7 @@ namespace ClassLibraryChatBot
             qBuff=new Question("пока", type_ans);
             dCommands.Add(qBuff, () =>
             {
-                isFinal = true;
+                m_IsFinal = true;
                 if (m_UserName != "")
                     return "до cвидания, " + m_UserName;
                 else
@@ -168,7 +172,7 @@ namespace ClassLibraryChatBot
             qBuff=new Question("до свидания");
             dCommands.Add(qBuff, () =>
             {
-                isFinal = true;
+                m_IsFinal = true;
                 if (m_UserName != "")
                     return "до cвидания, " + m_UserName;
                 else
