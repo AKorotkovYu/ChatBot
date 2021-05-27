@@ -20,7 +20,6 @@ namespace ClassLibraryChatBot
         Random randomizer = new Random();
 
         internal delegate string CommandMessage();
-        internal CommandMessage cMes;
 
          readonly List<Answer> lJokes = new List<Answer>();
          readonly List<Answer> lAphorisms = new List<Answer>();
@@ -39,6 +38,8 @@ namespace ClassLibraryChatBot
             GetBase();
         }
 
+
+        //главный метод, принимающий вопрос пользователя и выдающиий подходящий ответ из базы
         public string TakeAnswer(string asking)
         {
 
@@ -79,6 +80,8 @@ namespace ClassLibraryChatBot
             return answer_line;
         }
 
+
+        //выбрать случайный ответ из выборки ответов
         string TakeRandFromList(List<String> lPhrases)
         {
             int r = randomizer.Next(0, lPhrases.Count());
@@ -86,6 +89,7 @@ namespace ClassLibraryChatBot
             return an[0];
         }
 
+        //выбрать случайный ответ из всей переданной базы
         string TakeRandAnswer(List<Answer> lAnswer)
         {
             int r = randomizer.Next(0, lAnswer.Count());
@@ -93,6 +97,8 @@ namespace ClassLibraryChatBot
             return an1[0].Phrase;
         }
 
+
+        //выгрузка базы со всеми вопросами-ответами
         private void GetBase()// да-знаю что дохрена. с базой бы сократилось до строчек 30. 
         {
             string type_ans = "";
