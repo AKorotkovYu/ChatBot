@@ -28,10 +28,10 @@ namespace ClassLibraryChatBot
          readonly List<Answer> InitPhrases = new List<Answer>();
          readonly List<Answer> Errors = new List<Answer>();
          readonly Dictionary<Question, CommandMessage> Commands = new Dictionary<Question, CommandMessage>();
-         readonly List<Question> listQuestions = new List<Question>();
-            List<int> ListCrctIDAns;
+         readonly List<Question> Questions = new List<Question>();
+            List<int> CorrectIDsAnswers;
 
-        static readonly List<String> lPhrases = new List<string>();
+        static readonly List<String> Phrases = new List<string>();
 
         public Bot()
         {
@@ -45,7 +45,7 @@ namespace ClassLibraryChatBot
 
             asking = asking.ToLower();
             string answer_line = String.Empty;
-            lPhrases.Clear();
+            Phrases.Clear();
 
             foreach (var command in Commands)
                 if (command.Key.Phrase == asking)
@@ -53,7 +53,7 @@ namespace ClassLibraryChatBot
                     return command.Value();
                 }
 
-            foreach (Question oneQuestion in listQuestions)
+            foreach (Question oneQuestion in Questions)
             {
                 if (oneQuestion.Phrase == asking)
                 {
@@ -63,12 +63,12 @@ namespace ClassLibraryChatBot
                         {
                             if (oneQuestion.ID == id)
                             {
-                                lPhrases.Add(an.Phrase);
+                                Phrases.Add(an.Phrase);
                             }
                         }
 
                     }
-                    var va = TakeRandFromList(lPhrases);
+                    var va = TakeRandFromList(Phrases);
                     va ??= "NAN";
                     return va;
                 }
@@ -105,34 +105,34 @@ namespace ClassLibraryChatBot
 
             Question qBuff;
             qBuff = new Question("...");
-            listQuestions.Add(qBuff);
+            Questions.Add(qBuff);
 
             qBuff = new Question("хай");
-            listQuestions.Add(qBuff);
+            Questions.Add(qBuff);
 
             qBuff = new Question("привет");
-            listQuestions.Add(qBuff);
+            Questions.Add(qBuff);
 
             qBuff = new Question("приветствую");
-            listQuestions.Add(qBuff);
+            Questions.Add(qBuff);
 
             qBuff = new Question("здравствуй");
-            listQuestions.Add(qBuff);
+            Questions.Add(qBuff);
 
             qBuff = new Question("здравствуйте");
-            listQuestions.Add(qBuff);
+            Questions.Add(qBuff);
 
             qBuff = new Question("добрый день");
-            listQuestions.Add(qBuff);
+            Questions.Add(qBuff);
 
             qBuff = new Question("добрый вечер");
-            listQuestions.Add(qBuff);
+            Questions.Add(qBuff);
 
             qBuff = new Question("доброе утро");
-            listQuestions.Add(qBuff);
+            Questions.Add(qBuff);
 
             qBuff = new Question("доброй ночи");
-            listQuestions.Add(qBuff);
+            Questions.Add(qBuff);
 
             type_ans = "com";
             
@@ -190,48 +190,48 @@ namespace ClassLibraryChatBot
             type_ans = "ans";
 
             Answer aBuff;
-            ListCrctIDAns = new List<int> { 0, 1, 2, 3, 4, 5, 6, 7, 8 };
-            aBuff = new Answer(ListCrctIDAns, "Здравствуйте", type_ans);
+            CorrectIDsAnswers = new List<int> { 0, 1, 2, 3, 4, 5, 6, 7, 8 };
+            aBuff = new Answer(CorrectIDsAnswers, "Здравствуйте", type_ans);
             Meetings.Add(aBuff);
 
-            ListCrctIDAns = new List<int> { 0, 1, 2, 3, 4, 5, 6, 7, 8 };
-            aBuff = new Answer(ListCrctIDAns, "Хола", type_ans);
+            CorrectIDsAnswers = new List<int> { 0, 1, 2, 3, 4, 5, 6, 7, 8 };
+            aBuff = new Answer(CorrectIDsAnswers, "Хола", type_ans);
             Meetings.Add(aBuff);
 
-            ListCrctIDAns = new List<int> { 0, 1, 2, 3, 4, 5, 6, 7, 8 };
-            aBuff = new Answer(ListCrctIDAns, "Ни хао", type_ans);
+            CorrectIDsAnswers = new List<int> { 0, 1, 2, 3, 4, 5, 6, 7, 8 };
+            aBuff = new Answer(CorrectIDsAnswers, "Ни хао", type_ans);
             Meetings.Add(aBuff);
 
-            ListCrctIDAns = new List<int> { 0, 1, 2, 3, 4, 5, 6, 7, 8 };
-            aBuff = new Answer(ListCrctIDAns, "Халло", type_ans);
+            CorrectIDsAnswers = new List<int> { 0, 1, 2, 3, 4, 5, 6, 7, 8 };
+            aBuff = new Answer(CorrectIDsAnswers, "Халло", type_ans);
             Meetings.Add(aBuff);
 
-            ListCrctIDAns = new List<int> { 0, 1, 2, 3, 4, 5, 6, 7, 8 };
-            aBuff = new Answer(ListCrctIDAns, "Шалом", type_ans);
+            CorrectIDsAnswers = new List<int> { 0, 1, 2, 3, 4, 5, 6, 7, 8 };
+            aBuff = new Answer(CorrectIDsAnswers, "Шалом", type_ans);
             Meetings.Add(aBuff);
 
-            ListCrctIDAns = new List<int> { 0, 1, 2, 3, 4, 5, 6, 7, 8 };
-            aBuff = new Answer(ListCrctIDAns, "Буенос диас", type_ans);
+            CorrectIDsAnswers = new List<int> { 0, 1, 2, 3, 4, 5, 6, 7, 8 };
+            aBuff = new Answer(CorrectIDsAnswers, "Буенос диас", type_ans);
             Meetings.Add(aBuff);
 
-            ListCrctIDAns = new List<int> { 0, 1, 2, 3, 4, 5, 6, 7, 8 };
-            aBuff = new Answer(ListCrctIDAns, "Гутен таг", type_ans);
+            CorrectIDsAnswers = new List<int> { 0, 1, 2, 3, 4, 5, 6, 7, 8 };
+            aBuff = new Answer(CorrectIDsAnswers, "Гутен таг", type_ans);
             Meetings.Add(aBuff);
 
-            ListCrctIDAns = new List<int> { 0, 1, 2, 3, 4, 5, 6, 7, 8 };
-            aBuff = new Answer(ListCrctIDAns, "Здраво", type_ans);
+            CorrectIDsAnswers = new List<int> { 0, 1, 2, 3, 4, 5, 6, 7, 8 };
+            aBuff = new Answer(CorrectIDsAnswers, "Здраво", type_ans);
             Meetings.Add(aBuff);
 
-            ListCrctIDAns = new List<int> { 5, 6 };
-            aBuff = new Answer(ListCrctIDAns, "Добрый", type_ans);
+            CorrectIDsAnswers = new List<int> { 5, 6 };
+            aBuff = new Answer(CorrectIDsAnswers, "Добрый", type_ans);
             Meetings.Add(aBuff);
 
-            ListCrctIDAns = new List<int> { 8 };
-            aBuff = new Answer(ListCrctIDAns, "Доброй", type_ans);
+            CorrectIDsAnswers = new List<int> { 8 };
+            aBuff = new Answer(CorrectIDsAnswers, "Доброй", type_ans);
             Meetings.Add(aBuff);
 
-            ListCrctIDAns = new List<int> { 0, 1, 2, 3, 4, 5, 6, 7, 8 };
-            aBuff = new Answer(ListCrctIDAns, "Аве!", type_ans);
+            CorrectIDsAnswers = new List<int> { 0, 1, 2, 3, 4, 5, 6, 7, 8 };
+            aBuff = new Answer(CorrectIDsAnswers, "Аве!", type_ans);
             Meetings.Add(aBuff);
 
 
