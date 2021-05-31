@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<root>
+  <Meetings text="Здравствуйте" CorrectIDsAnswers="0 1 2 3 4 5 6 7 8 ">
+  </Meetings>
+  <Meetings text="Здравствуйте" CorrectIDsAnswers="0 1 2 3 4 5 6 7 8 ">
+  </Meetings>
+  <Meetings text="Хола" CorrectIDsAnswers="0 1 2 3 4 5 6 7 8 ">
+  </Meetings>
+  <Meetings text="Ни хао" CorrectIDsAnswers="0 1 2 3 4 5 6 7 8 ">
+  </Meetings>
+  <Meetings text="Халло" CorrectIDsAnswers="0 1 2 3 4 5 6 7 8 ">
+  </Meetings>
+  <Meetings text="Шалом" CorrectIDsAnswers="0 1 2 3 4 5 6 7 8 ">
+  </Meetings>
+  <Meetings text="Буенос диас" CorrectIDsAnswers="0 1 2 3 4 5 6 7 8 ">
+  </Meetings>
+  <Meetings text="Гутен таг" CorrectIDsAnswers="0 1 2 3 4 5 6 7 8 ">
+  </Meetings>
+  <Meetings text="Здраво" CorrectIDsAnswers="0 1 2 3 4 5 6 7 8 ">
+  </Meetings>
+  <Meetings text="Добрый" CorrectIDsAnswers="5 6 ">
+  </Meetings>
+  <Meetings text="Доброй" CorrectIDsAnswers="8 ">
+  </Meetings>
+  <Meetings text="Аве!" CorrectIDsAnswers="0 1 2 3 4 5 6 7 8 ">
+  </Meetings>
+
+</root>

@@ -1,17 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Xml;
+using System.IO;
 
 
 namespace ClassLibraryChatBot
 {
     public class Bot
     {
-
         private static string m_BotName = "Шарпик";
         private string m_UserName = new String("");
         private bool m_IsFinal = false;
+
         public bool IsFinal
         {
             get { return m_IsFinal; }
@@ -27,9 +28,9 @@ namespace ClassLibraryChatBot
          readonly List<Answer> Answers = new List<Answer>();
          readonly List<Answer> InitPhrases = new List<Answer>();
          readonly List<Answer> Errors = new List<Answer>();
+
          readonly Dictionary<Question, CommandMessage> Commands = new Dictionary<Question, CommandMessage>();
          readonly List<Question> Questions = new List<Question>();
-            List<int> CorrectIDsAnswers;
 
         static readonly List<String> Phrases = new List<string>();
 
@@ -37,7 +38,6 @@ namespace ClassLibraryChatBot
         {
             GetBase();
         }
-
 
         //главный метод, принимающий вопрос пользователя и выдающиий подходящий ответ из базы
         public string TakeAnswer(string asking)
@@ -97,297 +97,151 @@ namespace ClassLibraryChatBot
             return an1[0].Phrase;
         }
 
+        private void GetXMKBase(string questionsPath, string answersPath)
+        {
+
+        }
 
         //выгрузка базы со всеми вопросами-ответами
-        private void GetBase()// да-знаю что дохрена. с базой бы сократилось до строчек 30. 
+        private void GetXMLAnswers(List<Answer> answers, String fileName)
         {
-            string type_ans = string.Empty;
-
-            Question qBuff;
-            qBuff = new Question("...");
-            Questions.Add(qBuff);
-
-            qBuff = new Question("хай");
-            Questions.Add(qBuff);
-
-            qBuff = new Question("привет");
-            Questions.Add(qBuff);
-
-            qBuff = new Question("приветствую");
-            Questions.Add(qBuff);
-
-            qBuff = new Question("здравствуй");
-            Questions.Add(qBuff);
-
-            qBuff = new Question("здравствуйте");
-            Questions.Add(qBuff);
-
-            qBuff = new Question("добрый день");
-            Questions.Add(qBuff);
-
-            qBuff = new Question("добрый вечер");
-            Questions.Add(qBuff);
-
-            qBuff = new Question("доброе утро");
-            Questions.Add(qBuff);
-
-            qBuff = new Question("доброй ночи");
-            Questions.Add(qBuff);
-
-            type_ans = "com";
-            
-            qBuff=new Question("как тебя зовут", type_ans);
-            Commands.Add(qBuff, () => { return "Меня зовут " + m_BotName; });//9
-
-            qBuff = new Question("анекдот", type_ans);
-            Commands.Add(qBuff, () => { return TakeRandAnswer(Jokes); });//10
-
-            qBuff = new Question("который час", type_ans);
-            Commands.Add(qBuff, () => { return DateTime.Now.ToString().Split(" ").ToArray()[1]; });//11
-
-            qBuff = new Question("сколько времени", type_ans);
-            Commands.Add(qBuff, () => { return DateTime.Now.ToString().Split(" ").ToArray()[1]; });//12
-
-            qBuff = new Question("какая сейчас дата", type_ans);
-            Commands.Add(qBuff, () => { return DateTime.Now.ToString().Split(" ").ToArray()[0]; });//15
-
-            qBuff = new Question("брось кубик", type_ans);
-            Commands.Add(qBuff, () => { return randomizer.Next(0, 6).ToString(); });//16
-
-            qBuff = new Question("подбрось кубик", type_ans);
-            Commands.Add(qBuff, () => { return randomizer.Next(0, 6).ToString(); });//17
-
-            qBuff = new Question("брось монетку", type_ans);
-            Commands.Add(qBuff, () => { return (randomizer.Next(0, 6) == 1) ? "Орёл" : "Режка"; });//18
-
-            qBuff = new Question("подбрось монетку", type_ans);
-            Commands.Add(qBuff, () => { return (randomizer.Next(0, 6) == 1) ? "Орёл" : "Режка"; });//19
-
-            qBuff=new Question("пока", type_ans);
-            Commands.Add(qBuff, () =>
-            {
-                m_IsFinal = true;
-                if (m_UserName != "")
-                    return "до cвидания, " + m_UserName;
-                else
-                    return "до cвидания";
-            }
-               );
-
-
-            qBuff=new Question("до свидания");
-            Commands.Add(qBuff, () =>
-            {
-                m_IsFinal = true;
-                if (m_UserName != "")
-                    return "до cвидания, " + m_UserName;
-                else
-                    return "до cвидания";
-            }
-               );
-
-
-            type_ans = "ans";
-
             Answer aBuff;
-            CorrectIDsAnswers = new List<int> { 0, 1, 2, 3, 4, 5, 6, 7, 8 };
-            aBuff = new Answer(CorrectIDsAnswers, "Здравствуйте", type_ans);
-            Meetings.Add(aBuff);
-
-            CorrectIDsAnswers = new List<int> { 0, 1, 2, 3, 4, 5, 6, 7, 8 };
-            aBuff = new Answer(CorrectIDsAnswers, "Хола", type_ans);
-            Meetings.Add(aBuff);
-
-            CorrectIDsAnswers = new List<int> { 0, 1, 2, 3, 4, 5, 6, 7, 8 };
-            aBuff = new Answer(CorrectIDsAnswers, "Ни хао", type_ans);
-            Meetings.Add(aBuff);
-
-            CorrectIDsAnswers = new List<int> { 0, 1, 2, 3, 4, 5, 6, 7, 8 };
-            aBuff = new Answer(CorrectIDsAnswers, "Халло", type_ans);
-            Meetings.Add(aBuff);
-
-            CorrectIDsAnswers = new List<int> { 0, 1, 2, 3, 4, 5, 6, 7, 8 };
-            aBuff = new Answer(CorrectIDsAnswers, "Шалом", type_ans);
-            Meetings.Add(aBuff);
-
-            CorrectIDsAnswers = new List<int> { 0, 1, 2, 3, 4, 5, 6, 7, 8 };
-            aBuff = new Answer(CorrectIDsAnswers, "Буенос диас", type_ans);
-            Meetings.Add(aBuff);
-
-            CorrectIDsAnswers = new List<int> { 0, 1, 2, 3, 4, 5, 6, 7, 8 };
-            aBuff = new Answer(CorrectIDsAnswers, "Гутен таг", type_ans);
-            Meetings.Add(aBuff);
-
-            CorrectIDsAnswers = new List<int> { 0, 1, 2, 3, 4, 5, 6, 7, 8 };
-            aBuff = new Answer(CorrectIDsAnswers, "Здраво", type_ans);
-            Meetings.Add(aBuff);
-
-            CorrectIDsAnswers = new List<int> { 5, 6 };
-            aBuff = new Answer(CorrectIDsAnswers, "Добрый", type_ans);
-            Meetings.Add(aBuff);
-
-            CorrectIDsAnswers = new List<int> { 8 };
-            aBuff = new Answer(CorrectIDsAnswers, "Доброй", type_ans);
-            Meetings.Add(aBuff);
-
-            CorrectIDsAnswers = new List<int> { 0, 1, 2, 3, 4, 5, 6, 7, 8 };
-            aBuff = new Answer(CorrectIDsAnswers, "Аве!", type_ans);
-            Meetings.Add(aBuff);
-
-
-            type_ans = "jok";
-            aBuff = new Answer("есть опыт учёбы, есть опыт работы, хочу ещё опыт зарплаты.", type_ans);
-            Jokes.Add(aBuff);
-
-            aBuff = new Answer("самая неподкупная очередь — в туалет", type_ans);
-            Jokes.Add(aBuff);
-
-            aBuff = new Answer("девушки как печеньки — ломаются, пока не намокнут", type_ans);
-            Jokes.Add(aBuff);
-
-            aBuff = new Answer("улыбайтесь — это всех раздражает!", type_ans);
-            Jokes.Add(aBuff);
-
-            aBuff = new Answer("не волнуйтесь, какое бы ни было у вас здоровье — его хватит до конца вашей жизни!", type_ans);
-            Jokes.Add(aBuff);
-
-            aBuff = new Answer("если хочешь выглядеть молодой и стройной — держись поближе к старым и толстым", type_ans);
-            Jokes.Add(aBuff);
-
-            aBuff = new Answer("три причины отсутствия студента на занятиях: забыл, запил, забил.", type_ans);
-            Jokes.Add(aBuff);
-
-            aBuff = new Answer("девушка не воробей, залетит мало не покажется.", type_ans);
-            Jokes.Add(aBuff);
-
-            aBuff = new Answer("труднее всего тянуть до зарплаты последние 3,5 недели.", type_ans);
-            Jokes.Add(aBuff);
-
-            aBuff = new Answer("всё, что нас не убивает — впоследствии очень сильно об этом жалеет.", type_ans);
-            Jokes.Add(aBuff);
-
-            aBuff = new Answer("русский язык без мата превращается в доклад.", type_ans);
-            Jokes.Add(aBuff);
-
-            aBuff = new Answer("если Вас окружают одни дураки, значит Вы центральный.", type_ans);
-            Jokes.Add(aBuff);
-
-            aBuff = new Answer("любовь — это когда ты не хочешь засыпать, потому что реальность лучше, чем сон.", type_ans);
-            Jokes.Add(aBuff);
-
-            aBuff = new Answer("родился сам — помоги другому.", type_ans);
-            Jokes.Add(aBuff);
-
-            aBuff = new Answer("если у тебя прекрасная жена, офигительная любовница, крутая тачка, нет проблем с властями и налоговыми службами, а когда ты выходишь на улицу всегда светит солнце и прохожие тебе улыбаются — скажи уже НЕТ наркотикам!", type_ans);
-            Jokes.Add(aBuff);
-
-            aBuff = new Answer("подбитый глаз уменьшает обзор, но увеличивает опыт.", type_ans);
-            Jokes.Add(aBuff);
-
-            aBuff = new Answer("детство заканчивается тогда, когда хочется, чтобы желания исполнял не Дед Мороз, а Снегурочка.", type_ans);
-            Jokes.Add(aBuff);
-
-            aBuff = new Answer("каждый человек по-своему прав, а по-моему — нет.", type_ans);
-            Jokes.Add(aBuff);
-
-            aBuff = new Answer("будет и на вашем кладбище праздник.", type_ans);
-            Jokes.Add(aBuff);
-
-            aBuff = new Answer("люди, имеющие большие деньги, либо охраняются полицией, либо разыскиваются ею.", type_ans);
-            Jokes.Add(aBuff);
-
-            aBuff = new Answer("сделать женщину счастливой не трудно, трудно самому при этом остаться счастливым.", type_ans);
-            Jokes.Add(aBuff);
-
-            aBuff = new Answer("положительные эмоции — это эмоции, которые возникают, если на всё положить.", type_ans);
-            Jokes.Add(aBuff);
-
-
-            type_ans = "aph";
-
-            aBuff = new Answer("Все у меня идет по плану. Осталось узнать - чей это план.", type_ans);
-            Aphorisms.Add(aBuff);
-
-            aBuff = new Answer("Наступило лето. Девушки достали из шкафов голые коленки...", type_ans);
-            Aphorisms.Add(aBuff);
-
-            aBuff = new Answer("Выхожу сейчас из квартиры, а там двое прямо на лестничной площадке вакцинируются. Уважуха.", type_ans);
-            Aphorisms.Add(aBuff);
-
-            aBuff = new Answer("Финансовый совет: если вы не можете купить квартиру, просто унаследуйте ее.", type_ans);
-            Aphorisms.Add(aBuff);
-
-            aBuff = new Answer("Когда кот сидит у закрытой двери, это не просто кот. Это кот доступа!", type_ans);
-            Aphorisms.Add(aBuff);
-
-            aBuff = new Answer("Гюльчатай, сними масочку.", type_ans);
-            Aphorisms.Add(aBuff);
-
-            aBuff = new Answer("Индийское кино без песен и танцев - документальное.", type_ans);
-            Aphorisms.Add(aBuff);
-
-            aBuff = new Answer("Рабочий лайфхак: чтобы кола не пенилась при наливании в стакан, пейте виски.", type_ans);
-            Aphorisms.Add(aBuff);
-
-            aBuff = new Answer("Зарплата назывется еще и жалованием, потому что на нее все жалуются.", type_ans);
-            Aphorisms.Add(aBuff);
-
-            aBuff = new Answer("Прошу осудить мою зарплату за то, что она ограничивает мою свободу передвижения и причиняет мне физическую боль.", type_ans);
-            Aphorisms.Add(aBuff);
-
-            aBuff = new Answer("Добро пожаловать в мастерскую по ремонту айфонов «Яблочный спас»!", type_ans);
-            Aphorisms.Add(aBuff);
-
-            aBuff = new Answer("Koмпьютeрщик — этo eдинcтвeнный чeлoвeк, кoтoрый мoжeт пoпрocить у нaчaльникa двecти бaкcoв нa пaмять и иx пoлучить.", type_ans);
-            Aphorisms.Add(aBuff);
-
-            aBuff = new Answer("Когда захлопнулась ловушка. Я стал метаться и кричать. Но в паспорте уже стояла. Печать", type_ans);
-            Aphorisms.Add(aBuff);
-
-            aBuff = new Answer("Маньяк-филолог убивает только людей в польтах.", type_ans);
-            Aphorisms.Add(aBuff);
-
-            aBuff = new Answer("Любая школа автоматически получает статус гимназии, если трудовик и физрук закодируются.", type_ans);
-            Aphorisms.Add(aBuff);
-
-            aBuff = new Answer("Ненавижу перепады настроения, это просто потрясающе!", type_ans);
-            Aphorisms.Add(aBuff);
-
-            aBuff = new Answer("Пробка - это две русские беды в одном месте.", type_ans);
-            Aphorisms.Add(aBuff);
-
-            aBuff = new Answer("Heт, чтo зa люди, a? Зaшлa в гocти чaю пoпить — нa трeтий дeнь чувcтвую: кaк-тo нe oчeнь мнe тут и рaды…", type_ans);
-            Aphorisms.Add(aBuff);
-
-            aBuff = new Answer("На Василия, который двадцать лет живет в однокомнатной квартире с женой и тещей, комары уже не садятся.", type_ans);
-            Aphorisms.Add(aBuff);
-
-            aBuff = new Answer("Продавщица в хлебном отделе в моменты одиночества от нечего делать шевелит булками.", type_ans);
-            Aphorisms.Add(aBuff);
-
-            aBuff = new Answer("Продавщица в хлебном отделе в моменты одиночества от нечего делать шевелит булками.", type_ans);
-            Aphorisms.Add(aBuff);
-
-            type_ans = "ini";
-
-            aBuff = new Answer("Я вас не понял, поэтому лучше пошучу  :", type_ans);
-            InitPhrases.Add(aBuff);
-
-            aBuff = new Answer("Моя твоя не понимайт, держи шутку - ", type_ans);
-            InitPhrases.Add(aBuff);
-
-            aBuff = new Answer("Я не достаточно умён для такого. Но мудр - ", type_ans);
-            InitPhrases.Add(aBuff);
-
-            aBuff = new Answer("Эээ... ", type_ans);
-            InitPhrases.Add(aBuff);
-
-            aBuff = new Answer("Эээ... ", type_ans);
-            InitPhrases.Add(aBuff);
-
-
-            type_ans = "err";
-            Errors.Add(new Answer("Ошибка  :", type_ans));
+            List<String> textBuff = new List<string>();
+            XmlDocument xDoc = new XmlDocument();
+            string pathXMLFolder = "../../../XML/";
+            xDoc.Load(pathXMLFolder + fileName + ".xml");
+            XmlElement xRoot = xDoc.DocumentElement;
+            textBuff.Clear();
+
+            foreach (XmlNode xNode in xRoot)
+            {
+                if (xNode.Attributes.Count > 0)
+                {
+                    if(fileName=="ans")
+                    {
+                        XmlNode attrtext = xNode.Attributes.GetNamedItem("text");
+                        if (attrtext != null)
+                        {
+                            XmlNode attrID = xNode.Attributes.GetNamedItem("CorrectIDsAnswers");
+                            if (attrID != null)
+                            {
+                                string[] splitedAttr=attrID.Value.ToString().Split(" ");
+                                List<int> questionIDs = new List<int>();
+                                foreach (var i in splitedAttr)
+                                {
+                                    if(i!="")
+                                        questionIDs.Add(Int32.Parse(i));
+                                }
+                                aBuff = new Answer(questionIDs, attrtext.Value, fileName);
+                                answers.Add(aBuff);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (xNode.Attributes.Count > 0)
+                        {
+                            XmlNode attr = xNode.Attributes.GetNamedItem("text");
+                            if (attr != null)
+                            {
+                                aBuff = new Answer(attr.Value, fileName);
+                                answers.Add(aBuff);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private void GetXMLQuestions(List<Question> questions, String fileName)
+        {
+            Question qBuff;
+            List<String> textBuff = new List<string>();
+            XmlDocument xDoc = new XmlDocument();
+            string pathXMLFolder = "../../../XML/";
+            xDoc.Load(pathXMLFolder + fileName + ".xml");
+            XmlElement xRoot = xDoc.DocumentElement;
+            textBuff.Clear();
+
+            int i = 0;
+            foreach (XmlNode xNode in xRoot)
+            {
+                if (xNode.Attributes.Count > 0)
+                {
+                    XmlNode attr = xNode.Attributes.GetNamedItem("text");
+                    if (attr != null)
+                    {
+                        textBuff.Add(attr.Value);
+                        i++;
+                    }
+                }
+            }
+
+            switch(fileName)
+            {
+                /*case "com":
+                    {
+                        Commands.Add(qBuff = new Question(textBuff[0]), () => { return "Меня зовут " + m_BotName; });//9
+                        Commands.Add(qBuff = new Question(textBuff[1]), () => { return TakeRandAnswer(Jokes); });//10
+                        Commands.Add(qBuff = new Question(textBuff[2]), () => { return DateTime.Now.ToString().Split(" ").ToArray()[1]; });//11
+                        Commands.Add(qBuff = new Question(textBuff[3]), () => { return DateTime.Now.ToString().Split(" ").ToArray()[1]; });//12
+                        Commands.Add(qBuff = new Question(textBuff[4]), () => { return DateTime.Now.ToString().Split(" ").ToArray()[0]; });//15
+                        Commands.Add(qBuff = new Question(textBuff[5]), () => { return randomizer.Next(0, 6).ToString(); });//16
+                        Commands.Add(qBuff = new Question(textBuff[6]), () => { return randomizer.Next(0, 6).ToString(); });//17
+                        Commands.Add(qBuff = new Question(textBuff[7]), () => { return (randomizer.Next(0, 6) == 1) ? "Орёл" : "Режка"; });//18
+                        Commands.Add(qBuff = new Question(textBuff[8]), () => { return (randomizer.Next(0, 6) == 1) ? "Орёл" : "Режка"; });//19
+                        Commands.Add(qBuff = new Question(textBuff[9]), () =>
+                        {
+                            m_IsFinal = true;
+                            if (m_UserName != "")
+                                return "до cвидания, " + m_UserName;
+                            else
+                                return "до cвидания";
+                        }
+                           );
+                        Commands.Add(qBuff = new Question(textBuff[10]), () =>
+                        {
+                            m_IsFinal = true;
+                            if (m_UserName != "")
+                                return "до cвидания, " + m_UserName;
+                            else
+                                return "до cвидания";
+                        }
+                           );
+                    }
+                    break;
+                */
+                default:
+                    {
+                        foreach(var text in textBuff)
+                            questions.Add(qBuff = new Question(text));
+                    }
+                    break;
+            }
+        }
+
+        private void GetBase()
+        {
+            string fileName = "que";
+            GetXMLQuestions(Questions, fileName);
+
+            //fileName = "com";
+            //GetXMLQuestions(Commands, fileName);
+
+            fileName = "ans";
+            GetXMLAnswers(Meetings, fileName);
+
+            fileName = "jok";
+            GetXMLAnswers(Jokes,fileName);
+
+            fileName = "aph";
+            GetXMLAnswers(Aphorisms,fileName);
+
+            fileName = "ini";
+            GetXMLAnswers(InitPhrases, fileName);
+
+            fileName = "err";
+            GetXMLAnswers(Errors, fileName);
         }
     }
 }

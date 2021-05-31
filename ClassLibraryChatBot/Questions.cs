@@ -4,7 +4,6 @@ using System.Text;
 
 namespace ClassLibraryChatBot
 {
-
     sealed class Question
     {
         private static int m_newId = 0;
@@ -17,11 +16,6 @@ namespace ClassLibraryChatBot
         static Question()
         {
             m_newId = 0;
-        }
-
-        private Question()
-        {
-            /*-------------------------------------*/
         }
 
         public Question(string phrase, string type_of_question = "ask") //ask or com
