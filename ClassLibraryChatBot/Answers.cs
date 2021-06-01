@@ -6,7 +6,7 @@ namespace ClassLibraryChatBot
 { 
     public sealed class Answer
     {
-        private static int m_newId;
+        private static int newId;
         protected readonly int ID;
         public readonly List<int> questionIDs;
 
@@ -17,7 +17,7 @@ namespace ClassLibraryChatBot
 
         static Answer()
         {
-            m_newId = 0;
+            newId = 0;
         }
 
         private Answer()
@@ -27,8 +27,8 @@ namespace ClassLibraryChatBot
 
         public Answer(List<int> questionIds, string phrase, string type_of_answer)
         {
-            m_newId++;
-            ID = m_newId;
+            newId++;
+            ID = newId;
             this.answerType = type_of_answer;
             this.questionIDs = questionIds;
             this.phrase = phrase;
@@ -37,8 +37,8 @@ namespace ClassLibraryChatBot
         public Answer(string Phrase, string type_of_answer)
         {
             List<int> questionIds = new List<int>() { -1 };
-            m_newId++;
-            ID = m_newId;
+            newId++;
+            ID = newId;
             this.answerType = type_of_answer;
             this.questionIDs = questionIds;
             this.phrase = Phrase;

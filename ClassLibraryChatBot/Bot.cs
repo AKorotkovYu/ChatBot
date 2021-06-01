@@ -9,12 +9,11 @@ namespace ClassLibraryChatBot
     public class Bot
     {
         public static string botName = "Шарпик"; 
-        //private string m_UserName = new String("");
-        private bool m_IsFinal = false;
+        private readonly bool isFinal = false;
 
         public bool IsFinal
         {
-            get { return m_IsFinal; }
+            get { return isFinal; }
         }
 
         Random randomizer = new Random();
