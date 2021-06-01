@@ -1,23 +1,13 @@
-﻿<?xml version="1.0" encoding="utf-8" ?> 
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
-  <Question text="...">  
-  </Question>
-  <Question text="хай">
-  </Question>
-  <Question text="привет">
-  </Question>
-  <Question text="приветствую">
-  </Question>
-  <Question text="здравствуй">
-  </Question>
-  <Question text="здравствуйте">
-  </Question>
-  <Question text="добрый день">
-  </Question>
-  <Question text="добрый вечер">
-  </Question>
-  <Question text="доброе утро">
-  </Question>
-  <Question text="доброй ночи">
-  </Question>
+  <que text="..."/>
+  <que text="хай"/>
+  <que text="привет"/>
+  <que text="приветствую"/>
+  <que text="здравствуй"/>
+  <que text="здравствуйте"/>
+  <que text="добрый день"/>
+  <que text="добрый вечер"/>
+  <que text="доброе утро"/>
+  <que text="доброй ночи"/>
 </root>

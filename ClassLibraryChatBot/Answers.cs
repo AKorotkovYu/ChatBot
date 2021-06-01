@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace ClassLibraryChatBot
-{
-
-    class Answer
+{ 
+    public sealed class Answer
     {
         private static int m_newId;
         protected readonly int ID;

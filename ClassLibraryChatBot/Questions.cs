@@ -4,7 +4,7 @@ using System.Text;
 
 namespace ClassLibraryChatBot
 {
-    sealed class Question
+    public sealed class Question
     {
         private static int m_newId = 0;
         public readonly int ID;
