@@ -16,7 +16,7 @@ namespace ClassLibraryChatBot
             get { return isFinal; }
         }
 
-        Random randomizer = new Random();
+        readonly Random randomizer = new Random();
 
         public delegate string CommandMessage();
 
@@ -77,10 +77,10 @@ namespace ClassLibraryChatBot
             Phrases.Clear();
 
             foreach (var command in Commands)
-            if (command.Key.Phrase == asking)
-            {
-                return command.Value();
-            }
+                if (command.Key.Phrase == asking)
+                {
+                    return command.Value();
+                }
 
             if (asking=="анекдот")
             {
@@ -101,9 +101,7 @@ namespace ClassLibraryChatBot
                             }
                         }
                     }
-
-                    var va = TakeRandFromList(Phrases);
-                    return va;
+                    return TakeRandFromList(Phrases);
                 }
             }
    
@@ -124,7 +122,7 @@ namespace ClassLibraryChatBot
         {
             int r = randomizer.Next(0, lPhrases.Count());
             var an = lPhrases.Skip(r).Take(1).ToArray();
-            return an[0];
+            return an.FirstOrDefault();
         }
 
         /// <summary>
@@ -139,7 +137,7 @@ namespace ClassLibraryChatBot
             int r = randomizer.Next(0, lAnswer.Count());
             var an1 = lAnswer.Skip(r).Take(1).ToArray();
             
-            return an1[0].Phrase;
+            return an1.FirstOrDefault()?.Phrase;
         }
     }
 }

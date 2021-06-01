@@ -12,7 +12,7 @@ namespace ConsoleChatBot
         static Dictionary<Question, Bot.CommandMessage> commands = new Dictionary<Question, Bot.CommandMessage>();
         static Random randomizer = new Random();
 
-        static void Main(string[] args)
+        static void Main()
         { 
             List<Answer> answersList = new List<Answer>();
             List<Question> questionsList = new List<Question>();
@@ -43,7 +43,7 @@ namespace ConsoleChatBot
         /// </summary>
         /// <param name="fileName">Имя-тип XML файла</param>
         /// <param name="text">Добавляемый</param>
-        static void putXML(String fileName, string text)
+        static void putXML(string fileName, string text)
         {
             var xDoc = new XmlDocument();
             string pathXMLFolder = "../../../XML/";
@@ -67,7 +67,7 @@ namespace ConsoleChatBot
         /// <param name="fileName"></param>
         /// <param name="text"></param>
         /// <param name="IDs"></param>
-        static void putXML(String fileName, string text, string IDs)
+        static void putXML(string fileName, string text, string IDs)
         {
             var xDoc = new XmlDocument();
             string pathXMLFolder = "../../../XML/";

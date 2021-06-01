@@ -18,10 +18,10 @@ namespace ClassLibraryChatBot
             newId = 0;
         }
 
-        public Question(string phrase, string type_of_question = "ask") //ask or com
+        public Question(string phrase, string questionType = "ask")
         {
             newId++;
-            this.questionType = type_of_question;
+            this.questionType = questionType;
             ID = newId;
             this.phrase = phrase;
         }

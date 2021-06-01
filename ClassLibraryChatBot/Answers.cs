@@ -7,7 +7,7 @@ namespace ClassLibraryChatBot
     public sealed class Answer
     {
         private static int newId;
-        protected readonly int ID;
+        internal readonly int ID;
         public readonly List<int> questionIDs;
 
         private readonly string answerType;
@@ -25,23 +25,23 @@ namespace ClassLibraryChatBot
 
         }
 
-        public Answer(List<int> questionIds, string phrase, string type_of_answer)
+        public Answer(List<int> questionIds, string phrase, string typeOfAnswer)
         {
             newId++;
             ID = newId;
-            this.answerType = type_of_answer;
-            this.questionIDs = questionIds;
+            answerType = typeOfAnswer;
+            questionIDs = questionIds;
             this.phrase = phrase;
         }
 
-        public Answer(string Phrase, string type_of_answer)
+        public Answer(string Phrase, string typeOfAnswer)
         {
             List<int> questionIds = new List<int>() { -1 };
             newId++;
             ID = newId;
-            this.answerType = type_of_answer;
-            this.questionIDs = questionIds;
-            this.phrase = Phrase;
+            answerType = typeOfAnswer;
+            questionIDs = questionIds;
+            phrase = Phrase;
         }
 
         public void AddQuestionID(int questionID)
