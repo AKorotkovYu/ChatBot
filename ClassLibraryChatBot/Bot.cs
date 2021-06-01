@@ -36,6 +36,10 @@ namespace ClassLibraryChatBot
             this.Commands = Commands;
         }
 
+        /// <summary>
+        /// разбиение входных данных на листы  
+        /// </summary>
+        /// <param name="AnswersList">Входные данные</param>
         private void Split(List<Answer> AnswersList)
         {
             foreach(var Answer in AnswersList)
@@ -59,7 +63,11 @@ namespace ClassLibraryChatBot
         }
 
 
-        //главный метод, принимающий вопрос пользователя и выдающиий подходящий ответ из базы
+        /// <summary>
+        /// Главный метод, принимающий вопрос пользователя и выдающиий подходящий ответ из базы
+        /// </summary>
+        /// <param name="asking">Строка-вопрос, вводимая пользователем</param>
+        /// <returns></returns>
         public string TakeAnswer(string asking)
         {
             asking = asking.ToLower();
@@ -107,7 +115,11 @@ namespace ClassLibraryChatBot
             return answer_line;
         }
 
-        //выбрать случайный ответ из выборки ответов
+        /// <summary>
+        /// выбрать случайный текстовый ответ из выборки
+        /// </summary>
+        /// <param name="lPhrases">Лист строк из которых идёт выборка</param>
+        /// <returns></returns>
         string TakeRandFromList(List<String> lPhrases)
         {
             int r = randomizer.Next(0, lPhrases.Count());
@@ -115,7 +127,11 @@ namespace ClassLibraryChatBot
             return an[0];
         }
 
-        //выбрать случайный ответ из всей переданной базы
+        /// <summary>
+        /// выбрать случайный ответ из всей переданной базы
+        /// </summary>
+        /// <param name="lAnswer">Лист объектов-ответов из которого идёт выборка ответов</param>
+        /// <returns></returns>
         string TakeRandAnswer(List<Answer> lAnswer)
         {
             if (lAnswer.Count == 0)

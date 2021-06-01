@@ -37,28 +37,13 @@ namespace ConsoleChatBot
             }
         }
 
-        static void GetXML(List<Question> questions, String fileName)
-        {
-            Question qBuff;
-            var xDoc = new XmlDocument();
-            string pathXMLFolder = "../../../XML/";
-            xDoc.Load(pathXMLFolder + fileName + ".xml");
-            var xRoot = xDoc.DocumentElement;
 
-            foreach (XmlNode xNode in xRoot)
-            {
-                if (xNode.Attributes.Count > 0)
-                {
-                    XmlNode attr = xNode.Attributes.GetNamedItem("text");
-                    if (attr != null)
-                    {
-                        questions.Add(qBuff = new Question(attr.Value, fileName));
-                    }
-                }
-            }
-        }
-
-        static void putXML(String fileName,string text)
+        /// <summary>
+        /// сохранение фразы любого типа в файл
+        /// </summary>
+        /// <param name="fileName">Имя-тип XML файла</param>
+        /// <param name="text">Добавляемый</param>
+        static void putXML(String fileName, string text)
         {
             var xDoc = new XmlDocument();
             string pathXMLFolder = "../../../XML/";
@@ -75,6 +60,13 @@ namespace ConsoleChatBot
             xDoc.Save(pathXMLFolder + fileName + ".xml");
         }
 
+
+        /// <summary>
+        /// сохранение любого вариантом соответствий ответов
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <param name="text"></param>
+        /// <param name="IDs"></param>
         static void putXML(String fileName, string text, string IDs)
         {
             var xDoc = new XmlDocument();
@@ -96,6 +88,32 @@ namespace ConsoleChatBot
             xDoc.Save(pathXMLFolder + fileName + ".xml");
         }
 
+        static void GetXML(List<Question> questions, String fileName)
+        {
+            Question qBuff;
+            var xDoc = new XmlDocument();
+            string pathXMLFolder = "../../../XML/";
+            xDoc.Load(pathXMLFolder + fileName + ".xml");
+            var xRoot = xDoc.DocumentElement;
+
+            foreach (XmlNode xNode in xRoot)
+            {
+                if (xNode.Attributes.Count > 0)
+                {
+                    XmlNode attr = xNode.Attributes.GetNamedItem("text");
+                    if (attr != null)
+                    {
+                        questions.Add(qBuff = new Question(attr.Value, fileName));
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// получение всех вопросов из базы
+        /// </summary>
+        /// <param name="answers">Лист объектов-ответов</param>
+        /// <param name="fileName"></param>
         static void GetXML(List<Answer> answers, String fileName)
         {
             Answer aBuff;
@@ -144,6 +162,11 @@ namespace ConsoleChatBot
             }
         }
 
+
+        /// <summary>
+        /// Создание списка возможных комманд
+        /// </summary>
+        /// <param name="Commands">Словарь, состоящий из команды и делегата-действия</param>
         static void GetCommands(Dictionary<Question, Bot.CommandMessage> Commands)
         {
             Question qBuff;
