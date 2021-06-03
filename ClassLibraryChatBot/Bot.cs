@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
-using System.Xml;
-using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace ClassLibraryChatBot
 {
@@ -67,9 +67,10 @@ namespace ClassLibraryChatBot
         /// Главный метод, принимающий вопрос пользователя и выдающиий подходящий ответ из базы
         /// </summary>
         /// <param name="asking">Строка-вопрос, вводимая пользователем</param>
-        /// <returns></returns>
+        /// <returns>Ответ бота</returns>
         public string TakeAnswer(string asking)
         {
+            Thread.Sleep(5000);
             asking = asking.ToLower();
             string answer_line = String.Empty;
             string secondpart = String.Empty;
@@ -117,7 +118,7 @@ namespace ClassLibraryChatBot
         /// выбрать случайный текстовый ответ из выборки
         /// </summary>
         /// <param name="lPhrases">Лист строк из которых идёт выборка</param>
-        /// <returns></returns>
+        /// <returns>Случайный ответ</returns>
         string TakeRandFromList(List<String> lPhrases)
         {
             int r = randomizer.Next(0, lPhrases.Count());
@@ -129,7 +130,7 @@ namespace ClassLibraryChatBot
         /// выбрать случайный ответ из всей переданной базы
         /// </summary>
         /// <param name="lAnswer">Лист объектов-ответов из которого идёт выборка ответов</param>
-        /// <returns></returns>
+        /// <returns>Случайный ответ</returns>
         string TakeRandAnswer(List<Answer> lAnswer)
         {
             if (lAnswer.Count == 0)

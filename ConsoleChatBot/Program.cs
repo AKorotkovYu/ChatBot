@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Xml;
 using System.Linq;
-using System.Collections;
+using System.Threading;
 using ClassLibraryChatBot;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ConsoleChatBot
 {
@@ -11,7 +12,8 @@ namespace ConsoleChatBot
     {
         static Dictionary<Question, Bot.CommandMessage> commands = new Dictionary<Question, Bot.CommandMessage>();
         static Random randomizer = new Random();
-
+        static string answer=String.Empty;
+        static int countThreads = 0;
         static void Main()
         { 
             List<Answer> answersList = new List<Answer>();
@@ -27,16 +29,26 @@ namespace ConsoleChatBot
             Bot bot = new Bot(questionsList,answersList,commands);
 
             string asking = string.Empty;
-            string ans = string.Empty;
-
-            while (ans!="до свидания")
+            
+            while (answer!="до свидания")
             {
-                asking = Console.ReadLine();
-                ans = bot.TakeAnswer(asking);
-                System.Console.WriteLine(ans);
+                if (countThreads < 5)//чтобы бесцельно не плодить потоки. пять за раз
+                {
+                    Thread thr = new Thread(TakeThreadAnswer);
+                    thr.Start(bot);
+                    countThreads++;
+                }
             }
         }
 
+        static void TakeThreadAnswer(object bot)
+        {
+            
+            Bot threadBot = (Bot)bot;
+            answer = threadBot.TakeAnswer(Console.ReadLine());
+            Console.WriteLine(answer);
+            countThreads--;
+        }
 
         /// <summary>
         /// сохранение фразы любого типа в файл
