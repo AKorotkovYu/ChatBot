@@ -4,31 +4,25 @@ using System.Text;
 
 namespace ClassLibraryChatBot
 {
-
-    sealed class Question
+    public sealed class Question
     {
-        private static int m_newId = 0;
+        private static int newId = 0;
         public readonly int ID;
-        private string phrase;
-        private string questionType;
+        private readonly string phrase;
+        private readonly string questionType;
         public string Phrase { get { return phrase; } }
         public string QuestionType { get { return questionType; } }
 
         static Question()
         {
-            m_newId = 0;
+            newId = 0;
         }
 
-        private Question()
+        public Question(string phrase, string questionType = "ask")
         {
-            /*-------------------------------------*/
-        }
-
-        public Question(string phrase, string type_of_question = "ask") //ask or com
-        {
-            m_newId++;
-            this.questionType = type_of_question;
-            ID = m_newId;
+            newId++;
+            this.questionType = questionType;
+            ID = newId;
             this.phrase = phrase;
         }
     }

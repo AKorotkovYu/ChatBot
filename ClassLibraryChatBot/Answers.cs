@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace ClassLibraryChatBot
-{
-
-    class Answer
+{ 
+    public sealed class Answer
     {
-        private static int m_newId;
-        protected readonly int ID;
+        private static int newId;
+        internal readonly int ID;
         public readonly List<int> questionIDs;
 
         private readonly string answerType;
@@ -18,7 +17,7 @@ namespace ClassLibraryChatBot
 
         static Answer()
         {
-            m_newId = 0;
+            newId = 0;
         }
 
         private Answer()
@@ -26,23 +25,23 @@ namespace ClassLibraryChatBot
 
         }
 
-        public Answer(List<int> questionIds, string phrase, string type_of_answer)
+        public Answer(List<int> questionIds, string phrase, string typeOfAnswer)
         {
-            m_newId++;
-            ID = m_newId;
-            this.answerType = type_of_answer;
-            this.questionIDs = questionIds;
+            newId++;
+            ID = newId;
+            answerType = typeOfAnswer;
+            questionIDs = questionIds;
             this.phrase = phrase;
         }
 
-        public Answer(string Phrase, string type_of_answer)
+        public Answer(string Phrase, string typeOfAnswer)
         {
             List<int> questionIds = new List<int>() { -1 };
-            m_newId++;
-            ID = m_newId;
-            this.answerType = type_of_answer;
-            this.questionIDs = questionIds;
-            this.phrase = Phrase;
+            newId++;
+            ID = newId;
+            answerType = typeOfAnswer;
+            questionIDs = questionIds;
+            phrase = Phrase;
         }
 
         public void AddQuestionID(int questionID)

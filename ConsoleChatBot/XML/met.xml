@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <met text="Здравствуйте" CorrectIDsAnswers="0 1 2 3 4 5 6 7 8 " />
+  <met text="Здравствуйте" CorrectIDsAnswers="0 1 2 3 4 5 6 7 8 " />
+  <met text="Хола" CorrectIDsAnswers="0 1 2 3 4 5 6 7 8 " />
+  <met text="Ни хао" CorrectIDsAnswers="0 1 2 3 4 5 6 7 8 " />
+  <met text="Халло" CorrectIDsAnswers="0 1 2 3 4 5 6 7 8 " />
+  <met text="Шалом" CorrectIDsAnswers="0 1 2 3 4 5 6 7 8 " />
+  <met text="Буенос диас" CorrectIDsAnswers="0 1 2 3 4 5 6 7 8 " />
+  <met text="Гутен таг" CorrectIDsAnswers="0 1 2 3 4 5 6 7 8 " />
+  <met text="Здраво" CorrectIDsAnswers="0 1 2 3 4 5 6 7 8 " />
+  <met text="Добрый" CorrectIDsAnswers="5 6 " />
+  <met text="Доброй" CorrectIDsAnswers="8 " />
+  <met text="Аве!" CorrectIDsAnswers="0 1 2 3 4 5 6 7 8 " />
+</root>
