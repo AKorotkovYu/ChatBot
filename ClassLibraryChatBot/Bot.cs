@@ -23,6 +23,7 @@ namespace ClassLibraryChatBot
         public readonly List<Answer> Answers = new List<Answer>();
         readonly List<String> Phrases = new List<String>();
 
+
         public Bot(String botName, List<Answer> AnswersList, Dictionary<Question, CommandMessage> commands)
         {
             Answers = AnswersList;

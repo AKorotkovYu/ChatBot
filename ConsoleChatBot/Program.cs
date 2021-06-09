@@ -9,12 +9,12 @@ namespace ConsoleChatBot
 {
     class Program
     {
-        static Dictionary<Question, Bot.CommandMessage> commands = new Dictionary<Question, Bot.CommandMessage>();
-        static Random randomizer = new Random();
-        static string message=String.Empty;
-        //static (int ID, string nickname, string dateTime, string message) messageTurple;
         static List<(int ID, string dateTime, string nickname,  string message)> messagesTurples = new List<(int ID, string dateTime, string nickname, string message)>();
         static List<User> users = new List<User>();
+        static Dictionary<Question, Bot.CommandMessage> commands = new Dictionary<Question, Bot.CommandMessage>();
+        static Random randomizer = new Random();
+
+        static string message=String.Empty;
 
         static int messageID = 0;
 
@@ -25,7 +25,6 @@ namespace ConsoleChatBot
             List<Question> questions = new List<Question>();
             List<Answer> answers = new List<Answer>();
             List<Bot> bots = new List<Bot>();
-            
 
             string asking = String.Empty;
             bool isFinal = true;
@@ -33,6 +32,7 @@ namespace ConsoleChatBot
             GetXML(meetings, "met");
             GetXML(jokes, "jok");
 
+            //Комманды на вход боту
             commands.Add(new Question("привет"), () => { return TakeRandAnswer(meetings); });
             commands.Add(new Question("анекдот"), () => { return TakeRandAnswer(jokes); });
             commands.Add(new Question("current"), () => { return DateTime.Now.ToString(); });
@@ -58,14 +58,13 @@ namespace ConsoleChatBot
 
                 switch (splittedAsking[0])
                 {
-                    case "start-chat":
+                    case "start-chat"://начало чата
                         { 
                             isFinal = false;
-                            
                         }
                         break;
 
-                    case "sign":
+                    case "sign"://добавление пользователя
                         {
                             if (splittedAsking.Length >= 2)
                             {
@@ -74,7 +73,7 @@ namespace ConsoleChatBot
                                 {
                                     users.Add(new User(nickname));
                                     Console.WriteLine("User " + nickname + " signed");
-                                    addToUsersBase();
+                                    refillUsersBase();
                                 }
                                 else
                                 {
@@ -84,7 +83,7 @@ namespace ConsoleChatBot
                         }
                         break;
 
-                    case "logout":
+                    case "logout"://выход пользователя и удаление его из базы залогинившихся
                         {
                             if (splittedAsking.Length >= 2)
                             {
@@ -100,7 +99,7 @@ namespace ConsoleChatBot
                         Console.WriteLine("User "+ nickname + " not found");
                         break;
 
-                    case "add-mes":
+                    case "add-mes"://добавление сообщения 
                         if(splittedAsking.Length>=3)
                             foreach (User user in users)
                             {
@@ -118,7 +117,7 @@ namespace ConsoleChatBot
                                 }
                             }
                         break;
-                    case "del-mes":
+                    case "del-mes"://удаление сообщения
                         if (splittedAsking.Length >= 2)
                             foreach (User user in users)
                             {
@@ -143,7 +142,7 @@ namespace ConsoleChatBot
                             }
                         break;
 
-                    case "bot":
+                    case "bot"://обращение к боту
                         if (splittedAsking.Length >= 4)
                             foreach (Bot onebot in bots)
                             {
@@ -178,6 +177,7 @@ namespace ConsoleChatBot
                         {
                             users.Clear();
                             refillHistoryBase();
+                            refillUsersBase();
                             isFinal = true;
                         }
                         break;
@@ -188,6 +188,12 @@ namespace ConsoleChatBot
             while (!isFinal);
         }
 
+
+        /// <summary>
+        /// Выдать случайный ответ из предложенных
+        /// </summary>
+        /// <param name="lAnswer">лист с ответами на вход</param>
+        /// <returns></returns>
         static string TakeRandAnswer(List<Answer> lAnswer)
         {
             if (lAnswer.Count == 0)
@@ -198,6 +204,10 @@ namespace ConsoleChatBot
             return an1.FirstOrDefault()?.Phrase;
         }
 
+
+        /// <summary>
+        /// Получаем историю сообщений из бинарного файла
+        /// </summary>
         static void getHistoryBase()
         {
             using (BinaryReader reader = new BinaryReader(File.Open("../../../Binary/history", FileMode.OpenOrCreate)))
@@ -217,6 +227,9 @@ namespace ConsoleChatBot
                 messageID = messagesTurples.Last().ID;
         }
 
+        /// <summary>
+        /// Перезаписать файл истории
+        /// </summary>
         static void refillHistoryBase()
         {
             using (BinaryWriter writer = new BinaryWriter(File.Open("../../../Binary/history", FileMode.Create)))
@@ -232,6 +245,9 @@ namespace ConsoleChatBot
             }
         }
 
+        /// <summary>
+        /// Получаем базу неразлогинившихся пользователей
+        /// </summary>
         static void getUsersBase()
         {
             using (BinaryReader reader = new BinaryReader(File.Open("../../../Binary/users", FileMode.OpenOrCreate)))
@@ -244,14 +260,9 @@ namespace ConsoleChatBot
             }
         }
 
-        static void addToUsersBase()
-        {
-            using (BinaryWriter writer = new BinaryWriter(File.Open("../../../Binary/users", FileMode.OpenOrCreate)))
-            {
-                writer.Write(users.Last().nickname);
-            }
-        }
-
+        /// <summary>
+        /// Перезаписываем базу пользователей
+        /// </summary>
         static void refillUsersBase()
         {
             using (BinaryWriter writer = new BinaryWriter(File.Open("../../../Binary/users", FileMode.Create)))
@@ -311,6 +322,11 @@ namespace ConsoleChatBot
             xDoc.Save(pathXMLFolder + fileName + ".xml");
         }
 
+        /// <summary>
+        /// получение всех ответов из базы
+        /// </summary>
+        /// <param name="questions">Лист объектов-вопросов</param>
+        /// <param name="fileName">Имя файла</param>
         static void GetXML(List<Question> questions, String fileName)
         {
             Question qBuff;
@@ -336,7 +352,7 @@ namespace ConsoleChatBot
         /// получение всех вопросов из базы
         /// </summary>
         /// <param name="answers">Лист объектов-ответов</param>
-        /// <param name="fileName"></param>
+        /// <param name="fileName">Имя файла</param>
         static void GetXML(List<Answer> answers, String fileName)
         {
             Answer aBuff;
