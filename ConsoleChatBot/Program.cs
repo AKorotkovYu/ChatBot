@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace ConsoleChatBot
 {
-    class Program
+    class Program  
     {
         static List<(int ID, string dateTime, string nickname,  string message)> messagesTurples = new List<(int ID, string dateTime, string nickname, string message)>();
         static List<User> users = new List<User>();
