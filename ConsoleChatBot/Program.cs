@@ -48,6 +48,7 @@ namespace ConsoleChatBot
             
             do
             {
+                System.Console.WriteLine("enter 'start-chat'");
                 ask = Console.ReadLine();
                 isFinal = false;
             } 
@@ -104,7 +105,7 @@ namespace ConsoleChatBot
                             var history = onechat.GetHistory();
                             foreach(var message in history)
                             {
-                                Console.WriteLine(message.ID+" "+message.dateTime+" "+message.nickname+" "+message.message);
+                                Console.WriteLine(message.ID+" "+message.DateTime+" "+message.Nickname+" "+message.Message);
                             }
                         }
                         break;
@@ -134,9 +135,9 @@ namespace ConsoleChatBot
                         }
                         break;
                 }
-                //message = String.Empty;
+                
                 onechat.RefillUsersBase(usersFolder);
-                onechat.refillHistoryBase(historyFolder);
+                onechat.RefillHistoryBase(historyFolder);
             }
             while (!isFinal);
         }

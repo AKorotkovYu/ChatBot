@@ -9,16 +9,16 @@ namespace ConsoleChatBot
     public struct MessageInfo
     {
         public int ID { get; set; }
-        public string dateTime { get; set; }
-        public string nickname { get; set; }
-        public string message { get; set; }
+        public string DateTime { get; set; }
+        public string Nickname { get; set; }
+        public string Message { get; set; }
 
         public MessageInfo(int ID, string dateTime, string nickname, string message)
         {
             this.ID = ID;
-            this.dateTime = dateTime;
-            this.nickname = nickname;
-            this.message = message;
+            DateTime = dateTime;
+            Nickname = nickname;
+            Message = message;
         }
     }
 
@@ -28,9 +28,8 @@ namespace ConsoleChatBot
         public string ChatName { get { return chatName; } }
 
         List<MessageInfo> messages = new List<MessageInfo>();
-
-        List<User> users = new List<User>();
-        List<Bot> bots = new List<Bot>();
+        readonly List<User> users = new List<User>();
+        readonly List<Bot> bots = new List<Bot>();
 
         static string message = String.Empty;
         static int messageID = 0;
@@ -76,11 +75,11 @@ namespace ConsoleChatBot
                 {
                     users.Add(new User(nickname));
                     this.RefillUsersBase(usersPath);
-                    return true;//return "User " + nickname + " signed";
+                    return true;
                 }
                 else
                 {
-                    return false;//return "User " + nickname + " already signed");
+                    return false;
                 }
             }
             else
@@ -160,13 +159,13 @@ namespace ConsoleChatBot
                     {
                         foreach (var message in messages)
                         {
-                            Console.WriteLine(message.dateTime.Split(' ')[0]);
+                            Console.WriteLine(message.DateTime.Split(' ')[0]);
                             Console.WriteLine(DateTime.Now.ToString().Split(' ')[0]);
                             if (message.ID == id)
-                                if (message.dateTime.Split(' ')[0] == DateTime.Now.ToString().Split(' ')[0])
+                                if (message.DateTime.Split(' ')[0] == DateTime.Now.ToString().Split(' ')[0])
                                 {
                                     messages.Remove(message);
-                                    refillHistoryBase(historyPath);
+                                    RefillHistoryBase(historyPath);
                                     return true;
                                 }
                         }
@@ -203,7 +202,7 @@ namespace ConsoleChatBot
                                 {
                                     messages.Add(new MessageInfo(++messageID, DateTime.Now.ToString(), user.nickname, ask));
                                     messages.Add(new MessageInfo(++messageID, DateTime.Now.ToString(), onebot.botName, message));
-                                    return messages.Last().message;
+                                    return messages.Last().Message;
                                 }
                                 break;
                             }
@@ -216,18 +215,20 @@ namespace ConsoleChatBot
         public bool StopChat()
         {
             users.Clear();
-            refillHistoryBase("../../../Binary");
-            RefillUsersBase("../../../Binary");
-            return true;
+            if((RefillHistoryBase("../../../Binary"))&
+                (RefillUsersBase("../../../Binary")))
+                    return true;
+            return false;
         }
 
         /// <summary>
         /// Получаем историю сообщений из бинарного файла
         /// </summary>
-        public void GetHistoryBase(string path)
+        bool GetHistoryBase(string path)
         {
-            using (BinaryReader reader = new BinaryReader(File.Open(path + @"/" + chatName + "history", FileMode.OpenOrCreate)))
+            try
             {
+                using BinaryReader reader = new BinaryReader(File.Open(path + @"/" + chatName + "history", FileMode.OpenOrCreate));
                 while (reader.PeekChar() > -1)
                 {
                     int ID = reader.ReadInt32();
@@ -236,56 +237,83 @@ namespace ConsoleChatBot
                     string message = reader.ReadString();
                     messages.Add(new MessageInfo(ID, dateTime, nickname, message));
                 }
-
-
+                if (messages.Count != 0)
+                {
+                    messageID = messages.Last().ID;
+                    return true;
+                }
+                return false;
             }
-            if (messages.Count != 0)
-                messageID = messages.Last().ID;
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
         /// <summary>
         /// Перезаписать файл истории
         /// </summary>
-        public void refillHistoryBase(string path)
+        public bool RefillHistoryBase(string path)
         {
-            using (BinaryWriter writer = new BinaryWriter(File.Open(path + @"/" + chatName + "history", FileMode.Create)))
+            try
             {
+                using BinaryWriter writer = new BinaryWriter(File.Open(path + @"/" + chatName + "history", FileMode.Create));
                 foreach (var messageTurple in messages)
                     if (messages.Count != 0)
                     {
                         writer.Write(messageTurple.ID);
-                        writer.Write(messageTurple.dateTime);
-                        writer.Write(messageTurple.nickname);
-                        writer.Write(messageTurple.message);
+                        writer.Write(messageTurple.DateTime);
+                        writer.Write(messageTurple.Nickname);
+                        writer.Write(messageTurple.Message);
                     }
             }
-        }
+            catch(Exception)
+            {
+                return false;
+            }
+            return true;
+         }
 
         /// <summary>
         /// Получаем базу неразлогинившихся пользователей
         /// </summary>
-        public void GetUsersBase(string path)
+        public bool GetUsersBase(string path)
         {
-            using (BinaryReader reader = new BinaryReader(File.Open(path + @"/" + chatName + "users", FileMode.OpenOrCreate)))
+            try
             {
+                using BinaryReader reader = new BinaryReader(File.Open(path + @"/" + chatName + "users", FileMode.OpenOrCreate));
                 while (reader.PeekChar() > -1)
                 {
                     User user = new User(reader.ReadString());
                     users.Add(user);
                 }
+                
             }
+            catch(Exception)
+            {
+                return false;
+            }
+            return true;
         }
 
         /// <summary>
         /// Перезаписываем базу пользователей
         /// </summary>
-        public void RefillUsersBase(string path)
+        public bool RefillUsersBase(string path)
         {
-            using (BinaryWriter writer = new BinaryWriter(File.Open(path + @"/" + chatName + "users", FileMode.Create)))
+            try
             {
-                foreach (var user in users)
-                    writer.Write(user.nickname);
+                using BinaryWriter writer = new BinaryWriter(File.Open(path + @"/" + chatName + "users", FileMode.Create));
+                {
+                    foreach (var user in users)
+                        writer.Write(user.nickname);
+                }
             }
+            catch(Exception)
+            {
+                return false;
+            }
+            return true;
         }
     }
 }
