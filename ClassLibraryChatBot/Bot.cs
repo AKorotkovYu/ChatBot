@@ -8,7 +8,7 @@ namespace ClassLibraryChatBot
 {
     public class Bot
     {
-        public static string botName = "Шарпик"; 
+        public string botName = "Шарпик"; 
         private readonly bool isFinal = false;
 
         public bool IsFinal
@@ -19,49 +19,20 @@ namespace ClassLibraryChatBot
         readonly Random randomizer = new Random();
 
         public delegate string CommandMessage();
+        readonly Dictionary<Question, CommandMessage> commands = new Dictionary<Question, CommandMessage>();
+        public readonly List<Answer> Answers = new List<Answer>();
+        readonly List<String> Phrases = new List<String>();
 
-        public readonly List<Answer> Jokes = new List<Answer>();
-        public readonly List<Answer> Aphorisms = new List<Answer>();
-        public readonly List<Answer> Meetings = new List<Answer>();
-        public readonly List<Answer> InitPhrases = new List<Answer>();
-
-        readonly Dictionary<Question, CommandMessage> Commands = new Dictionary<Question, CommandMessage>();
-        readonly List<Question> Questions = new List<Question>();
-        static readonly List<String> Phrases = new List<String>();
-
-        public Bot(List<Question> QuestionsList, List<Answer> AnswersList, Dictionary<Question, CommandMessage> Commands)
+        public Bot(String botName, List<Answer> AnswersList, Dictionary<Question, CommandMessage> commands)
         {
-            Split(AnswersList);
-            Questions = QuestionsList;
-            this.Commands = Commands;
-        }
+            Answers = AnswersList;
+            
 
-        /// <summary>
-        /// разбиение входных данных на листы  
-        /// </summary>
-        /// <param name="AnswersList">Входные данные</param>
-        private void Split(List<Answer> AnswersList)
-        {
-            foreach(var Answer in AnswersList)
-            {
-                switch(Answer.AnswerType)
-                {
-                    case "jok":
-                            Jokes.Add(Answer);
-                        break;
-                    case "aph":
-                            Aphorisms.Add(Answer);
-                        break;
-                    case "met":
-                            Meetings.Add(Answer);
-                        break;
-                    case "ini":
-                            InitPhrases.Add(Answer);
-                        break;
-                }
-            }
+            foreach(var command in commands)
+                this.commands.Add(command.Key,command.Value);
+            commands.Add(new Question("/как тебя зовут"), () => { return "Меня зовут:"; });
+            this.botName = botName;
         }
-
 
         /// <summary>
         /// Главный метод, принимающий вопрос пользователя и выдающиий подходящий ответ из базы
@@ -70,75 +41,26 @@ namespace ClassLibraryChatBot
         /// <returns>Ответ бота</returns>
         public string TakeAnswer(string asking)
         {
-            Thread.Sleep(5000);
+            //Thread.Sleep(5000);
             asking = asking.ToLower();
             string answer_line = String.Empty;
             string secondpart = String.Empty;
 
             Phrases.Clear();
 
-            foreach (var command in Commands)
-                if (command.Key.Phrase == asking)
-                {
-                    return command.Value();
-                }
-
-            if (asking=="анекдот")
-            {
-                return TakeRandAnswer(Jokes);
-            }
-
-            foreach (Question oneQuestion in Questions)
-            {
-                if (oneQuestion.Phrase == asking)
-                {
-                    foreach (Answer an in Meetings)
+            string answer;
+                foreach (var command in commands)
+                   if(command.Key.Phrase==asking)
                     {
-                        foreach (int id in an.questionIDs)
+                        if(command.Value()=="Меня зовут:")
                         {
-                            if (oneQuestion.ID == id)
-                            {
-                                Phrases.Add(an.Phrase);
-                            }
-                        }
+                            answer=command.Value + " " + botName;
+                        }    
+                        else 
+                            answer= command.Value();
+                        return answer;
                     }
-                    return TakeRandFromList(Phrases);
-                }
-            }
-   
-            answer_line = TakeRandAnswer(InitPhrases);
-            if(answer_line!="ERROR")  
-                secondpart = TakeRandAnswer(Aphorisms);
-            answer_line += " ";
-            answer_line += secondpart;
-            return answer_line;
-        }
-
-        /// <summary>
-        /// выбрать случайный текстовый ответ из выборки
-        /// </summary>
-        /// <param name="lPhrases">Лист строк из которых идёт выборка</param>
-        /// <returns>Случайный ответ</returns>
-        string TakeRandFromList(List<String> lPhrases)
-        {
-            int r = randomizer.Next(0, lPhrases.Count());
-            var an = lPhrases.Skip(r).Take(1).ToArray();
-            return an.FirstOrDefault();
-        }
-
-        /// <summary>
-        /// выбрать случайный ответ из всей переданной базы
-        /// </summary>
-        /// <param name="lAnswer">Лист объектов-ответов из которого идёт выборка ответов</param>
-        /// <returns>Случайный ответ</returns>
-        string TakeRandAnswer(List<Answer> lAnswer)
-        {
-            if (lAnswer.Count == 0)
-                return "ERROR";
-            int r = randomizer.Next(0, lAnswer.Count());
-            var an1 = lAnswer.Skip(r).Take(1).ToArray();
-            
-            return an1.FirstOrDefault()?.Phrase;
+            return null;
         }
     }
 }

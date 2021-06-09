@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Xml;
 using System.Linq;
-using System.Threading;
+using System.IO;
 using ClassLibraryChatBot;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace ConsoleChatBot
 {
@@ -12,42 +11,254 @@ namespace ConsoleChatBot
     {
         static Dictionary<Question, Bot.CommandMessage> commands = new Dictionary<Question, Bot.CommandMessage>();
         static Random randomizer = new Random();
-        static string answer=String.Empty;
-        static int countThreads = 0;
+        static string message=String.Empty;
+        //static (int ID, string nickname, string dateTime, string message) messageTurple;
+        static List<(int ID, string dateTime, string nickname,  string message)> messagesTurples = new List<(int ID, string dateTime, string nickname, string message)>();
+        static List<User> users = new List<User>();
+
+        static int messageID = 0;
+
         static void Main()
         { 
-            List<Answer> answersList = new List<Answer>();
-            List<Question> questionsList = new List<Question>();
-
-            GetXML(answersList, "jok");
-            GetXML(answersList, "aph");
-            GetXML(answersList, "met");
-            GetXML(questionsList, "que");
-            GetXML(answersList, "ini");
-            GetCommands(commands);
-
-            Bot bot = new Bot(questionsList,answersList,commands);
-
-            string asking = string.Empty;
+            List<Answer> jokes = new List<Answer>();
+            List<Answer> meetings = new List<Answer>();
+            List<Question> questions = new List<Question>();
+            List<Answer> answers = new List<Answer>();
+            List<Bot> bots = new List<Bot>();
             
-            while (answer!="до свидания")
+
+            string asking = String.Empty;
+            bool isFinal = true;
+
+            GetXML(meetings, "met");
+            GetXML(jokes, "jok");
+
+            commands.Add(new Question("привет"), () => { return TakeRandAnswer(meetings); });
+            commands.Add(new Question("анекдот"), () => { return TakeRandAnswer(jokes); });
+            commands.Add(new Question("current"), () => { return DateTime.Now.ToString(); });
+            commands.Add(new Question("через"), () => { return DateTime.Now.ToString().Split(" ").ToArray()[0]; });
+            commands.Add(new Question("сколько времени"), () => { return DateTime.Now.ToString().Split(" ").ToArray()[0]; });
+            commands.Add(new Question("брось кубик"), () => { return randomizer.Next(0, 6).ToString(); });
+            commands.Add(new Question("подбрсь монетку"), () => { return (randomizer.Next(0, 6) == 1) ? "Орёл" : "Режка"; });
+            commands.Add(new Question("до свидания"), () => { return "До cвидания"; });
+            commands.Add(new Question("пока"), () => { return "До cвидания"; });            
+            
+            bots.Add(new Bot("Шарпик", answers, commands));
+            bots.Add(new Bot("Шарпик2", answers, commands));
+            getUsersBase();
+            getHistoryBase();
+
+            string nickname = String.Empty;
+            string botName = String.Empty;
+
+            do
             {
-                if (countThreads < 5)//чтобы бесцельно не плодить потоки. пять за раз
+                asking = Console.ReadLine();
+                var splittedAsking = asking.Split().ToArray();
+
+                switch (splittedAsking[0])
                 {
-                    Thread thr = new Thread(TakeThreadAnswer);
-                    thr.Start(bot);
-                    countThreads++;
+                    case "start-chat":
+                        { 
+                            isFinal = false;
+                            
+                        }
+                        break;
+
+                    case "sign":
+                        {
+                            if (splittedAsking.Length >= 2)
+                            {
+                                nickname = splittedAsking[1].Trim('@');
+                                if (users.Find(user => user.nickname == nickname) == null)
+                                {
+                                    users.Add(new User(nickname));
+                                    Console.WriteLine("User " + nickname + " signed");
+                                    addToUsersBase();
+                                }
+                                else
+                                {
+                                    Console.WriteLine("User " + nickname + " already signed");
+                                }
+                            }
+                        }
+                        break;
+
+                    case "logout":
+                        {
+                            if (splittedAsking.Length >= 2)
+                            {
+                                nickname = splittedAsking[1].Trim('@');
+                                if (users.Find(user => user.nickname == nickname) != null)
+                                {
+                                    users.Remove(new User(nickname));
+                                    refillUsersBase();
+                                    break;
+                                }
+                            }
+                        } 
+                        Console.WriteLine("User "+ nickname + " not found");
+                        break;
+
+                    case "add-mes":
+                        if(splittedAsking.Length>=3)
+                            foreach (User user in users)
+                            {
+                                nickname = splittedAsking[1].Trim('@');
+                                if (nickname == user.nickname)
+                                {
+                                    for (int i = 2; i < splittedAsking.Length; i++)
+                                    {
+                                        message += " " + splittedAsking[i];
+                                    }
+                                    messagesTurples.Add((++messageID, DateTime.Now.ToString(), user.nickname, asking));
+                                    messagesTurples.Add((++messageID, DateTime.Now.ToString(), user.nickname, message));
+                                    Console.WriteLine(messagesTurples.Last().dateTime+" | "+messagesTurples.Last().nickname +" : "+ messagesTurples.Last().message);
+                                    break;
+                                }
+                            }
+                        break;
+                    case "del-mes":
+                        if (splittedAsking.Length >= 2)
+                            foreach (User user in users)
+                            {
+                                DateTime dt = new DateTime();
+                                nickname = splittedAsking[1].Trim('@');
+                                int id = Int32.Parse(splittedAsking[2].Trim('@'));
+                                if (nickname == user.nickname)
+                                {
+                                    foreach (var messageTurple in messagesTurples)
+                                    {
+                                        Console.WriteLine(messageTurple.dateTime.Split(' ')[0]);
+                                        Console.WriteLine(DateTime.Now.ToString().Split(' ')[0]);
+                                        if (messageTurple.ID == id)
+                                            if(messageTurple.dateTime.Split(' ')[0]==DateTime.Now.ToString().Split(' ')[0])
+                                            { 
+                                                messagesTurples.Remove(messageTurple);
+                                                refillHistoryBase();
+                                            }
+                                        break;
+                                    }
+                                }
+                            }
+                        break;
+
+                    case "bot":
+                        if (splittedAsking.Length >= 4)
+                            foreach (Bot onebot in bots)
+                            {
+                                botName = splittedAsking[1].Trim('@');
+                                nickname = splittedAsking[2].Trim('@');
+                            
+                                if (onebot.botName == botName)
+                                {
+                                    foreach (User user in users)
+                                    {
+                                        if (user.nickname == nickname)
+                                        {
+                                            string askToBot = String.Empty;
+                                            for (int i = 3; i < splittedAsking.Length; i++)
+                                                askToBot += splittedAsking[i];//склеиваем комманду без адреса
+                                            message = onebot.TakeAnswer(askToBot);
+
+                                            if (message != null)
+                                            {
+                                                messagesTurples.Add((++messageID, DateTime.Now.ToString(), user.nickname,  asking));
+                                                messagesTurples.Add((++messageID, DateTime.Now.ToString(), onebot.botName,  message));
+                                                Console.WriteLine(messagesTurples.Last().dateTime + " | " + messagesTurples.Last().nickname + " : " + messagesTurples.Last().message);
+                                            }
+                                            break;
+                                        }
+                                    }
+                                } 
+                            }
+                        break;
+
+                    case "stop-chat":
+                        {
+                            users.Clear();
+                            refillHistoryBase();
+                            isFinal = true;
+                        }
+                        break;
+                }
+                message = String.Empty;
+                refillHistoryBase();
+            }
+            while (!isFinal);
+        }
+
+        static string TakeRandAnswer(List<Answer> lAnswer)
+        {
+            if (lAnswer.Count == 0)
+                return "ERROR";
+            int r = randomizer.Next(0, lAnswer.Count());
+            var an1 = lAnswer.Skip(r).Take(1).ToArray();
+
+            return an1.FirstOrDefault()?.Phrase;
+        }
+
+        static void getHistoryBase()
+        {
+            using (BinaryReader reader = new BinaryReader(File.Open("../../../Binary/history", FileMode.OpenOrCreate)))
+            {
+                while (reader.PeekChar() > -1)
+                {
+                    int ID = reader.ReadInt32();
+                    string dateTime = reader.ReadString();
+                    string nickname = reader.ReadString();
+                    string message = reader.ReadString();
+                    messagesTurples.Add((ID,dateTime,nickname,message));
+                }
+
+                
+            }
+            if(messagesTurples.Count!=0) 
+                messageID = messagesTurples.Last().ID;
+        }
+
+        static void refillHistoryBase()
+        {
+            using (BinaryWriter writer = new BinaryWriter(File.Open("../../../Binary/history", FileMode.Create)))
+            {
+                foreach(var messageTurple in messagesTurples)
+                if (messagesTurples.Count != 0)
+                {
+                    writer.Write(messageTurple.ID);
+                    writer.Write(messageTurple.dateTime);
+                    writer.Write(messageTurple.nickname);
+                    writer.Write(messageTurple.message);
                 }
             }
         }
 
-        static void TakeThreadAnswer(object bot)
+        static void getUsersBase()
         {
-            
-            Bot threadBot = (Bot)bot;
-            answer = threadBot.TakeAnswer(Console.ReadLine());
-            Console.WriteLine(answer);
-            countThreads--;
+            using (BinaryReader reader = new BinaryReader(File.Open("../../../Binary/users", FileMode.OpenOrCreate)))
+            {
+                while (reader.PeekChar() > -1)
+                {
+                    User user = new User(reader.ReadString());
+                    users.Add(user);
+                }
+            }
+        }
+
+        static void addToUsersBase()
+        {
+            using (BinaryWriter writer = new BinaryWriter(File.Open("../../../Binary/users", FileMode.OpenOrCreate)))
+            {
+                writer.Write(users.Last().nickname);
+            }
+        }
+
+        static void refillUsersBase()
+        {
+            using (BinaryWriter writer = new BinaryWriter(File.Open("../../../Binary/users", FileMode.Create)))
+            {
+                foreach(var user in users)
+                    writer.Write(user.nickname);
+            }
         }
 
         /// <summary>
@@ -173,35 +384,5 @@ namespace ConsoleChatBot
                 }
             }
         }
-
-
-        /// <summary>
-        /// Создание списка возможных комманд
-        /// </summary>
-        /// <param name="Commands">Словарь, состоящий из команды и делегата-действия</param>
-        static void GetCommands(Dictionary<Question, Bot.CommandMessage> Commands)
-        {
-            Question qBuff;
-
-            Commands.Add(qBuff = new Question("как тебя зовут"), () => { return "Меня зовут " + Bot.botName; });//9
-            Commands.Add(qBuff = new Question("какая сейчас дата"), () => { return DateTime.Now.ToString().Split(" ").ToArray()[1]; });//11
-            Commands.Add(qBuff = new Question("который час"), () => { return DateTime.Now.ToString().Split(" ").ToArray()[1]; });//12
-            Commands.Add(qBuff = new Question("сколько времени"), () => { return DateTime.Now.ToString().Split(" ").ToArray()[0]; });//15
-            Commands.Add(qBuff = new Question("брось кубик"), () => { return randomizer.Next(0, 6).ToString(); });//16
-            Commands.Add(qBuff = new Question("подбрось кубик"), () => { return randomizer.Next(0, 6).ToString(); });//17
-            Commands.Add(qBuff = new Question("подбрось монетку"), () => { return (randomizer.Next(0, 6) == 1) ? "Орёл" : "Режка"; });//18
-            Commands.Add(qBuff = new Question("брось монетку"), () => { return (randomizer.Next(0, 6) == 1) ? "Орёл" : "Режка"; });//19
-            Commands.Add(qBuff = new Question("до свидания"), () =>
-            {
-                return "до cвидания";
-            }
-                );
-            Commands.Add(qBuff = new Question("пока"), () =>
-            {
-                return "до cвидания";
-            }
-                );
-        }
-
     }
 }
