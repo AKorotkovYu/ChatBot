@@ -102,6 +102,11 @@ namespace ClassLibraryChat
             }
         }
 
+        /// <summary>
+        /// Перезаполняем историю сообщений в бинарном файле
+        /// </summary>
+        /// <param name="path">путь до папки с бинарным файлом</param>
+        /// <returns></returns>
         protected bool RefillHistoryBase(string path)
         {
             try
