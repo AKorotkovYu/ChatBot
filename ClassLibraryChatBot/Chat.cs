@@ -27,6 +27,13 @@ namespace ClassLibraryChat
 
         }
 
+
+        /// <summary>
+        /// Смена имени Чата
+        /// </summary>
+        /// <param name="user">Пользователь из чата</param>
+        /// <param name="chatName">Новое имя чата</param>
+        /// <returns>Выоплнено ли</returns>
         bool ChangeChatName(User user, string chatName)
         {
             foreach (User oneUser in users)
@@ -40,6 +47,12 @@ namespace ClassLibraryChat
             return false;
         }
 
+
+        /// <summary>
+        /// Найти пользователя по нику
+        /// </summary>
+        /// <param name="nickname">Никнейм искомого пользователя</param>
+        /// <returns></returns>
         public User FindUser(string nickname)
         {
            return users.Find(user => user.Nickname == nickname);
@@ -57,6 +70,11 @@ namespace ClassLibraryChat
                 return false;
         }
 
+
+        /// <summary>
+        /// Получение всех пользователей чата в формате листа
+        /// </summary>
+        /// <returns>Лист с пользователями</returns>
         public List<User> GetAllUsers()
         {
             List<User> allUsers = new List<User>();
@@ -65,6 +83,12 @@ namespace ClassLibraryChat
             return allUsers;
         }
 
+
+        /// <summary>
+        /// выйти из чата-оффлайн
+        /// </summary>
+        /// <param name="nickname"></param>
+        /// <returns></returns>
         public bool LogOut(string nickname)
         {
             FindUser(nickname).IsOnline=false;
@@ -72,6 +96,10 @@ namespace ClassLibraryChat
             return true;
         }
 
+        /// <summary>
+        /// Остановить чат
+        /// </summary>
+        /// <returns></returns>
         public bool StopChat()
         {
             if(this.RefillUsersBase(basePath))
