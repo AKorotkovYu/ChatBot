@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ClassLibraryChatBot\ClassLibraryChatBot.csproj" />
+    <ProjectReference Include="..\ClassLibraryChatBot\ClassLibraryChat.csproj" />
   </ItemGroup>
 
   <ItemGroup>
